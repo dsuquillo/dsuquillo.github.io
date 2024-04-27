@@ -1,12 +1,301 @@
 <!DOCTYPE html>
-<HTML>
+<html>
   <head>
-    <title>Mi primer WEB</title>
+    <title>Mi Perfil</title>
+    <link rel="icon" href="./favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css"
+      rel="stylesheet"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+    />
   </head>
   <body>
-    <div>
-      <h1>Hola mundo!</h1>
-      <p>Este es un ejemplo del uso de HTML para crear un documento web que nuestro navegador es capaz de interpretar.</p>
+    <div id="app">
+      <v-app>
+        <v-main>
+          <v-container fluid>
+            <v-row justify="center">
+              <v-col cols="12" lg="8">
+                <v-card class="mx-auto">
+                  <v-img
+                    class="white--text align-end"
+                    height="300px"
+                    src="img/portada_original.jpg"
+                  >
+                    <v-container>
+                      <v-row>
+                        <v-col>
+                          <v-avatar size="164">
+                            <v-img src="img/foto.jpg"></v-img>
+                          </v-avatar>
+                          <v-card-title>
+                            Diego Armando Suquillo Gualotu&ntilde;a
+                          </v-card-title>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-img>
+                  <v-row justify="center" class="pt-3">
+                    <v-col lg="8">
+                      <v-banner
+                        lg="4"
+                        shaped
+                        elevation="3"
+                        class="font-weight-bold font-italic"
+                      >
+                        <v-icon slot="icon" color="error" size="36">
+                          favorite
+                        </v-icon>
+                        "Hay cosas en la vida que no se pueden cambiar, pero tu
+                        actitud frente a ellas s&iacute; que se puede cambiar.
+                        Depende solamente de ti."
+                      </v-banner>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-card-title>
+                        <h3>Informaci&oacute;n personal</h3>
+                      </v-card-title>
+                      <v-divider></v-divider>
+                      <v-row>
+                        <v-col
+                          cols="12"
+                          lg="6"
+                          :class="$vuetify.breakpoint.xsOnly ? 'pb-0' : ''"
+                        >
+                          <v-list two-line>
+                            <v-list-item
+                              v-for="(info, i) in infoPersonal.slice(0, 3)"
+                              :key="i"
+                            >
+                              <v-list-item-avatar>
+                                <v-icon color="primary">{{info.icon}}</v-icon>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title
+                                  class="font-weight-bold"
+                                  v-html="info.title"
+                                >
+                                </v-list-item-title>
+                                <v-list-item-subtitle
+                                  v-html="info.subtitle === '' && info.title === 'Edad' ? edad : info.subtitle"
+                                >
+                                </v-list-item-subtitle>
+                              </v-list-item-content>
+                            </v-list-item>
+                          </v-list>
+                        </v-col>
+                        <v-col
+                          cols="12"
+                          lg="6"
+                          :class="$vuetify.breakpoint.xsOnly ? 'pt-0' : ''"
+                        >
+                          <v-list two-line>
+                            <v-list-item
+                              v-for="(info, i) in infoPersonal.slice(3, 6)"
+                              :key="i"
+                            >
+                              <v-list-item-avatar>
+                                <v-icon color="primary">{{info.icon}}</v-icon>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title
+                                  class="font-weight-bold"
+                                  v-html="info.title"
+                                >
+                                </v-list-item-title>
+                                <v-list-item-subtitle
+                                  v-html="info.subtitle === '' && info.title === 'Edad' ? edad : info.subtitle"
+                                >
+                                </v-list-item-subtitle>
+                              </v-list-item-content>
+                            </v-list-item>
+                          </v-list>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-card-title>
+                        <h3>Educaci&oacute;n</h3>
+                      </v-card-title>
+                      <v-divider></v-divider>
+                      <v-timeline align-top dense>
+                        <v-timeline-item color="success" small>
+                          <v-row class="pt-1">
+                            <v-col
+                              :cols="$vuetify.breakpoint.xsOnly ? '12' : '3'"
+                            >
+                              <strong>1995 - 2000</strong>
+                            </v-col>
+                            <v-col>
+                              <strong>
+                                Escuela J.M. Jij&oacute;n Caama&ntilde;o y
+                                Flores
+                              </strong>
+                              <div class="text-caption">
+                                Chaupitena - Ecuador
+                              </div>
+                            </v-col>
+                          </v-row>
+                        </v-timeline-item>
+                        <v-timeline-item color="success" small>
+                          <v-row class="pt-1">
+                            <v-col
+                              :cols="$vuetify.breakpoint.xsOnly ? '12' : '3'"
+                            >
+                              <strong>2001 - 2006</strong>
+                            </v-col>
+                            <v-col>
+                              <strong>
+                                Unidad Educativa Experimental "Don Bosco" - La
+                                Tola
+                              </strong>
+                              <div class="text-caption">Quito - Ecuador</div>
+                            </v-col>
+                          </v-row>
+                        </v-timeline-item>
+                        <v-timeline-item color="success" small>
+                          <v-row class="pt-1">
+                            <v-col
+                              :cols="$vuetify.breakpoint.xsOnly ? '12' : '3'"
+                            >
+                              <strong>2007</strong>
+                            </v-col>
+                            <v-col>
+                              <strong>
+                                Escuela Polit&eacute;cnica Nacional
+                              </strong>
+                              <div class="text-caption">Quito - Ecuador</div>
+                            </v-col>
+                          </v-row>
+                        </v-timeline-item>
+                      </v-timeline>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-card-title>
+                        <h3>Intereses</h3>
+                      </v-card-title>
+                      <v-divider></v-divider>
+                      <v-timeline class="mx-2">
+                        <v-timeline-item>
+                          <template v-slot:icon>
+                            <v-avatar>
+                              <img src="img/foto.jpg" />
+                            </v-avatar>
+                          </template>
+                          <v-card class="elevation-2">
+                            <v-card-text>
+                              T&eacute;rminar mis estudios superiores.
+                            </v-card-text>
+                          </v-card>
+                        </v-timeline-item>
+                        <v-timeline-item>
+                          <template v-slot:icon>
+                            <v-avatar>
+                              <img src="img/foto.jpg" />
+                            </v-avatar>
+                          </template>
+                          <v-card class="elevation-2">
+                            <v-card-text>
+                              Pulir mis habilidades como desarrollador
+                              Fullstack.
+                            </v-card-text>
+                          </v-card>
+                        </v-timeline-item>
+                      </v-timeline>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-card-title>
+                        <h3>Proyectos</h3>
+                      </v-card-title>
+                      <v-divider></v-divider>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-card-title>
+                        <h3>Habilidades</h3>
+                      </v-card-title>
+                      <v-divider></v-divider>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-main>
+      </v-app>
     </div>
-  </body>  
-</HTML>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script>
+      new Vue({
+        el: "#app",
+        vuetify: new Vuetify(),
+        data: () => ({
+          infoPersonal: [
+            {
+              icon: "account_circle",
+              title: "Nombre",
+              subtitle: "Diego Armando Suquillo Gualotu&ntilde;a",
+            },
+            {
+              icon: "mail",
+              title: "Correo",
+              subtitle: "diego_suquillo@outlook.com",
+            },
+            {
+              icon: "mdi-github",
+              title: "Github",
+              subtitle: "https://github.com/dsuquillo",
+            },
+            {
+              icon: "credit_card",
+              title: "Identificaci&oacute;n",
+              subtitle: "1718197989",
+            },
+            {
+              icon: "cake",
+              title: "Edad",
+              subtitle: "",
+            },
+            {
+              icon: "phone",
+              title: "Tel&eacute;fono celular",
+              subtitle: "+593 989136439",
+            },
+          ],
+        }),
+        computed: {
+          edad() {
+            var hoy = new Date();
+            var cumpleanos = new Date("1988-09-23");
+            var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+            var m = hoy.getMonth() - cumpleanos.getMonth();
+
+            if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+              edad--;
+            }
+
+            return edad;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
