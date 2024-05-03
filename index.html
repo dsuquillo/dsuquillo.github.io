@@ -28,7 +28,7 @@
     <div id="app">
       <v-app>
         <v-main>
-          <v-container fluid>
+          <v-container v-if="loader" fluid class="mb-4">
             <v-row justify="center">
               <v-col cols="12" lg="8">
                 <v-card class="mx-auto">
@@ -76,12 +76,12 @@
                       <v-row>
                         <v-col
                           cols="12"
-                          lg="6"
+                          sm="6"
                           :class="$vuetify.breakpoint.xsOnly ? 'pb-0' : ''"
                         >
                           <v-list two-line>
                             <v-list-item
-                              v-for="(info, i) in infoPersonal.slice(0, 3)"
+                              v-for="(info, i) in personalInformation.slice(0, 3)"
                               :key="i"
                             >
                               <v-list-item-avatar>
@@ -103,12 +103,12 @@
                         </v-col>
                         <v-col
                           cols="12"
-                          lg="6"
+                          sm="6"
                           :class="$vuetify.breakpoint.xsOnly ? 'pt-0' : ''"
                         >
                           <v-list two-line>
                             <v-list-item
-                              v-for="(info, i) in infoPersonal.slice(3, 6)"
+                              v-for="(info, i) in personalInformation.slice(3, 6)"
                               :key="i"
                             >
                               <v-list-item-avatar>
@@ -136,52 +136,27 @@
                       </v-card-title>
                       <v-divider></v-divider>
                       <v-timeline align-top dense>
-                        <v-timeline-item color="success" small>
-                          <v-row class="pt-1">
+                        <v-timeline-item
+                          v-for="record in appliedStudies"
+                          :key="record.date"
+                          color="purple"
+                          icon="school"
+                          fill
+                        >
+                          <v-row>
                             <v-col
                               :cols="$vuetify.breakpoint.xsOnly ? '12' : '3'"
                             >
-                              <strong>1995 - 2000</strong>
+                              <strong> {{record.date}} </strong>
                             </v-col>
                             <v-col>
-                              <strong>
-                                Escuela J.M. Jij&oacute;n Caama&ntilde;o y
-                                Flores
-                              </strong>
+                              <p
+                                v-html="record.title"
+                                class="font-weight-bold mb-0"
+                              ></p>
                               <div class="text-caption">
-                                Chaupitena - Ecuador
+                                {{record.subtitle}}
                               </div>
-                            </v-col>
-                          </v-row>
-                        </v-timeline-item>
-                        <v-timeline-item color="success" small>
-                          <v-row class="pt-1">
-                            <v-col
-                              :cols="$vuetify.breakpoint.xsOnly ? '12' : '3'"
-                            >
-                              <strong>2001 - 2006</strong>
-                            </v-col>
-                            <v-col>
-                              <strong>
-                                Unidad Educativa Experimental "Don Bosco" - La
-                                Tola
-                              </strong>
-                              <div class="text-caption">Quito - Ecuador</div>
-                            </v-col>
-                          </v-row>
-                        </v-timeline-item>
-                        <v-timeline-item color="success" small>
-                          <v-row class="pt-1">
-                            <v-col
-                              :cols="$vuetify.breakpoint.xsOnly ? '12' : '3'"
-                            >
-                              <strong>2007</strong>
-                            </v-col>
-                            <v-col>
-                              <strong>
-                                Escuela Polit&eacute;cnica Nacional
-                              </strong>
-                              <div class="text-caption">Quito - Ecuador</div>
                             </v-col>
                           </v-row>
                         </v-timeline-item>
@@ -192,30 +167,19 @@
                         <h3>Intereses</h3>
                       </v-card-title>
                       <v-divider></v-divider>
-                      <v-timeline class="mx-2">
-                        <v-timeline-item>
-                          <template v-slot:icon>
-                            <v-avatar>
-                              <img src="img/foto.jpg" />
-                            </v-avatar>
-                          </template>
+                      <v-timeline
+                        :dense="$vuetify.breakpoint.xsOnly"
+                        class="mx-2"
+                      >
+                        <v-timeline-item
+                          v-for="item in interests"
+                          :color="item.color"
+                          :icon="item.icon"
+                          fill-dot
+                          :key="item.icon"
+                        >
                           <v-card class="elevation-2">
-                            <v-card-text>
-                              T&eacute;rminar mis estudios superiores.
-                            </v-card-text>
-                          </v-card>
-                        </v-timeline-item>
-                        <v-timeline-item>
-                          <template v-slot:icon>
-                            <v-avatar>
-                              <img src="img/foto.jpg" />
-                            </v-avatar>
-                          </template>
-                          <v-card class="elevation-2">
-                            <v-card-text>
-                              Pulir mis habilidades como desarrollador
-                              Fullstack.
-                            </v-card-text>
+                            <v-card-text v-html="item.content"></v-card-text>
                           </v-card>
                         </v-timeline-item>
                       </v-timeline>
@@ -225,22 +189,143 @@
                         <h3>Proyectos</h3>
                       </v-card-title>
                       <v-divider></v-divider>
+                      <v-timeline dense class="mx-4">
+                        <v-slide-x-reverse-transition group hide-on-leave>
+                          <v-timeline-item
+                            v-for="(project, p) in projects"
+                            :key="p"
+                            color="primary"
+                            icon="engineering"
+                            fill-dot
+                          >
+                            <v-card>
+                              <v-list-item>
+                                <v-list-item-content>
+                                  <v-list-item-title
+                                    class="text-h5"
+                                    v-html="project.title"
+                                  >
+                                  </v-list-item-title>
+                                  <v-list-item-subtitle
+                                    v-html="project.subtitle"
+                                  >
+                                  </v-list-item-subtitle>
+                                </v-list-item-content>
+                              </v-list-item>
+                              <v-card-text>
+                                <p class="subtitle-2">Actividades</p>
+                                <ul>
+                                  <li
+                                    v-for="(activity, i) in project.activities"
+                                    v-html="activity"
+                                    :key="i"
+                                  ></li>
+                                </ul>
+                                <template
+                                  v-if="project.relevantActivities && project.relevantActivities.length"
+                                >
+                                  <p class="subtitle-2 pt-3">
+                                    Actividades relevantes
+                                  </p>
+                                  <ul>
+                                    <li
+                                      v-for="(activity, j) in project.relevantActivities"
+                                      v-html="activity"
+                                      :key="j"
+                                    ></li>
+                                  </ul>
+                                </template>
+                              </v-card-text>
+                            </v-card>
+                          </v-timeline-item>
+                        </v-slide-x-reverse-transition>
+                      </v-timeline>
                     </v-col>
                     <v-col cols="12">
                       <v-card-title>
                         <h3>Habilidades</h3>
                       </v-card-title>
                       <v-divider></v-divider>
+                      <v-row>
+                        <v-col
+                          cols="12"
+                          sm="6"
+                          :class="$vuetify.breakpoint.xsOnly ? 'pb-0' : ''"
+                        >
+                          <v-list three-line>
+                            <v-list-item
+                              v-for="(skill, i) in skills.slice(0, 3)"
+                              :key="i"
+                            >
+                              <v-list-item-avatar>
+                                <v-icon color="primary">
+                                  {{skill.icon}}
+                                </v-icon>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title
+                                  class="font-weight-bold"
+                                  v-html="skill.title"
+                                >
+                                </v-list-item-title>
+                                <v-list-item-subtitle v-html="skill.subtitle">
+                                </v-list-item-subtitle>
+                                <v-progress-linear
+                                  height="7"
+                                  v-model="skill.amount"
+                                  color="purple"
+                                ></v-progress-linear>
+                              </v-list-item-content>
+                            </v-list-item>
+                          </v-list>
+                        </v-col>
+                        <v-col
+                          cols="12"
+                          sm="6"
+                          :class="$vuetify.breakpoint.xsOnly ? 'pb-0' : ''"
+                        >
+                          <v-list three-line>
+                            <v-list-item
+                              v-for="(skill, i) in skills.slice(3, 6)"
+                              :key="i"
+                            >
+                              <v-list-item-avatar>
+                                <v-icon color="primary">{{skill.icon}}</v-icon>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title
+                                  class="font-weight-bold"
+                                  v-html="skill.title"
+                                >
+                                </v-list-item-title>
+                                <v-list-item-subtitle v-html="skill.subtitle">
+                                </v-list-item-subtitle>
+                                <v-progress-linear
+                                  height="7"
+                                  v-model="skill.amount"
+                                  color="purple"
+                                ></v-progress-linear>
+                              </v-list-item-content>
+                            </v-list-item>
+                          </v-list>
+                        </v-col>
+                      </v-row>
                     </v-col>
                   </v-row>
                 </v-card>
               </v-col>
             </v-row>
           </v-container>
+          <v-container v-else class="loader text-center">
+            <v-progress-circular
+              indeterminate
+              size="100"
+              class="primary--text"
+            ></v-progress-circular>
+          </v-container>
         </v-main>
       </v-app>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script>
@@ -248,7 +333,7 @@
         el: "#app",
         vuetify: new Vuetify(),
         data: () => ({
-          infoPersonal: [
+          personalInformation: [
             {
               icon: "account_circle",
               title: "Nombre",
@@ -280,6 +365,127 @@
               subtitle: "+593 989136439",
             },
           ],
+          loader: false,
+          appliedStudies: [
+            {
+              date: "1995 - 2000",
+              title: "Escuela J.M. Jij&oacute;n Caama&ntilde;o y Flores",
+              subtitle: "Chaupitena - Ecuador",
+            },
+            {
+              date: "2001 - 2006",
+              title: 'Unidad Educativa Experimental "Don Bosco" - La Tola',
+              subtitle: "Quito - Ecuador",
+            },
+            {
+              date: "2007",
+              title: "Escuela Polit&eacute;cnica Nacional",
+              subtitle: "Quito - Ecuador",
+            },
+          ],
+          projects: [
+            {
+              title:
+                "Consorcio Petrosud Petroriva y Consorcio Palanda Yuca Sur",
+              subtitle: "Pasant&iacute;as (6 meses)",
+              activities: [
+                "Soporte al usuario",
+                "Mantenimiento de equipos (Pc's y Laptops)",
+                "Manejo b&aacute;sico de recursos de red",
+              ],
+            },
+            {
+              title: "Corporaci&oacute;n Mej&iacute;a Astudillo",
+              subtitle: "Programador Junior (1 a&ntilde;o)",
+              activities: [
+                "Desarrollo de aplicaciones web",
+                "Desarrollo de p&aacute;ginas web",
+                "Soporte al usuario",
+              ],
+            },
+            {
+              title: "BYTEAM S.A.",
+              subtitle: "Programador Senior (6 a&ntilde;os)",
+              activities: [
+                "Desarrollo de aplicaciones",
+                "Manejo b&aacute;sico de servicios de Google",
+                "Full stack developer",
+              ],
+              relevantActivities: [
+                "Participaci&oacute;n en el desarrollo de la plataforma de evaluaci&oacute;n <b>Saber+</b>.",
+                "Participaci&oacute;n en el proceso de consultor&iacute;a de evaluaciones con la <b>SENESCYT</b>.",
+                "Participaci&oacute;n en el proceso de consultor&iacute;a de evaluaciones para el ingreso a <b>UCUENCA</b>.",
+                "Participaci&oacute;n en el proceso de evaluaci&oacute;n para los Estados de <b>Nuevo Le&oacute;n</b> y <b>Tamaulipas</b> en <b>M&eacute;xico</b>.",
+              ],
+            },
+          ],
+          interests: [
+            {
+              icon: "school",
+              color: "primary",
+              content:
+                "Terminar mis estudios superiores. Para mejorar mis oportunidades laborales.",
+            },
+            {
+              icon: "code",
+              color: "purple",
+              content: "Pulir mis habilidades como desarrollador Fullstack.",
+            },
+            {
+              icon: "sports_soccer",
+              color: "primary",
+              content: "Practicar f&uacute;tbol para mantenerme activo.",
+            },
+            {
+              icon: "restaurant",
+              color: "purple",
+              content:
+                "Experimentar con nuevas recetas y compartir comidas deliciosas con mi familia.",
+            },
+            {
+              icon: "sports_esports",
+              color: "primary",
+              content: "Mejorar mis habilidades en los video juegos.",
+            },
+          ],
+          skills: [
+            {
+              icon: "mdi-language-javascript",
+              title: "Vue.js - Progressive JavaScript Framework",
+              subtitle: "Javascript",
+              amount: 90,
+            },
+            {
+              icon: "mdi-language-javascript",
+              title: "Vuetify - UI Component Framework for Vue",
+              subtitle: "Javascript",
+              amount: 100,
+            },
+            {
+              icon: "mdi-language-php",
+              title: "Laravel - PHP web application framework",
+              subtitle: "PHP",
+              amount: 90,
+            },
+            {
+              icon: "mdi-database",
+              title: "Postgresql",
+              subtitle: "SQL",
+              amount: 80,
+            },
+            {
+              icon: "mdi-google-cloud",
+              title: "Google Firebase",
+              subtitle: "Servicios en la nube de Google",
+              amount: 50,
+            },
+            {
+              icon: "mdi-google",
+              title: "Flutter - Google's UI toolkit",
+              subtitle: "Aplicaciones para Android, iOS, Web, Desktop",
+              amount: 30,
+            },
+          ],
         }),
         computed: {
           edad() {
@@ -294,6 +500,11 @@
 
             return edad;
           },
+        },
+        created() {
+          window.onload = () => {
+            this.loader = true;
+          };
         },
       });
     </script>
